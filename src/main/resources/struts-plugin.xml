@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+    
+<struts>
+    <constant name="struts.flush.tokenprefix" value="dsafdsfsdfas74562-148231712438312734" />
+    <constant name="struts.flush.exceptionhandler" value="com.yasudanetwork.struts2.flush.exceptionhandler.SilentExceptionHandler" />
+    <constant name="struts.flush.requestdeliver" value="com.yasudanetwork.struts2.flush.requestdeliver.SilentExceptionHandler" />
+    <package name="flush-default" extends="struts-default">
+        <result-types>
+            <result-type name="flush" class="com.yasudanetwork.struts2.flush.FlushResult"/>
+        </result-types>
+        <!-- simple default interceptors stack -->
+        <interceptors>
+            <interceptor name="flush" class="com.yasudanetwork.struts2.flush.FlushInterceptor"/>
+            <interceptor-stack name="flushScopedSupportDefaultStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="flush"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="flushScopedSupportDefaultStack"/>
+    </package>    
+
+</struts>
