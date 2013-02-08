@@ -1,16 +1,16 @@
 package com.yasudanetwork.struts2.flush;
 
-import com.opensymphony.xwork2.ActionInvocation;
-
 public interface RequestParametersDeliver {
 	/**
 	 * implement your delivery logic.
-	 * 
-	 * @param createRequest
+	 * <pre>
+	 *   user submit -> request action -> response redirect -> [this method] -> response action -> user receive response.
+	 * </pre>
+	 * @param request
 	 * @param actionInvocation
-	 * @param responseAction
+	 * @param original response action
 	 * @return modified response action object.
 	 * @throws Exception
 	 */
-	Object delivery(FlushScopedRequest createRequest, ActionInvocation actionInvocation,Object responseAction) throws Exception ;
+	Object delivery(FlushScopedRequest request, Object responseAction) throws Exception ;
 }

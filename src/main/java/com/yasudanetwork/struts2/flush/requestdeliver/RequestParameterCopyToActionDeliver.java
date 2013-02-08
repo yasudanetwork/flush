@@ -5,30 +5,25 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.ValidationAware;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.interceptor.NoParameters;
 import com.opensymphony.xwork2.interceptor.ParameterNameAware;
 import com.opensymphony.xwork2.interceptor.ParametersInterceptor;
-import com.opensymphony.xwork2.util.ClearableValueStack;
 import com.opensymphony.xwork2.util.LocalizedTextUtil;
-import com.opensymphony.xwork2.util.MemberAccessValueStack;
 import com.opensymphony.xwork2.util.TextParseUtil;
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.ValueStackFactory;
 import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
-import com.opensymphony.xwork2.util.reflection.ReflectionContextState;
+import com.yasudanetwork.struts2.flush.FailureDeliveryRequestParametersException;
 import com.yasudanetwork.struts2.flush.FlushScopedRequest;
 import com.yasudanetwork.struts2.flush.RequestParametersDeliver;
 /**
@@ -45,6 +40,21 @@ public class RequestParameterCopyToActionDeliver  implements RequestParametersDe
 	    private String acceptedParamNames = "[[\\p{Graph}\\s]&&[^,#:=]]*";
 	    private Pattern acceptedPattern = Pattern.compile(acceptedParamNames);
 	    
+		public Object delivery(FlushScopedRequest requestParameters,  Object responseAction)
+				throws Exception {
+	        
+	        if (!(responseAction instanceof NoParameters)) {
+	        	setParameters(requestParameters.getRequestAction(), responseAction,requestParameters.getRequestParameters());
+	        }
+	        return responseAction;
+	    }
+		protected boolean acceptableName(String name) {
+	        if (isAccepted(name) && !isExcluded(name)) {
+	            return true;
+	        }
+	        return false;
+		}
+
 
 	    @Inject("devMode")
 	    public static void setDevMode(String mode) {
@@ -88,69 +98,6 @@ public class RequestParameterCopyToActionDeliver  implements RequestParametersDe
 	        }
 
 	    };
-	    
-
-	    public Object doIntercept(FlushScopedRequest requestParameters, ActionInvocation invocation, Object responseAction) throws Exception {
-	        
-	        if (!(responseAction instanceof NoParameters)) {
-	            ActionContext ac = invocation.getInvocationContext();
-	            final Map<String, Object> parameters =requestParameters.getRequestParameters();
-
-	            if (LOG.isDebugEnabled()) {
-	                LOG.debug("Setting params " + getParameterLogMap(parameters));
-	            }
-
-	            if (parameters != null) {
-	                Map<String, Object> contextMap = ac.getContextMap();
-	                try {
-	                    ReflectionContextState.setCreatingNullObjects(contextMap, true);
-	                    ReflectionContextState.setDenyMethodExecution(contextMap, true);
-	                    ReflectionContextState.setReportingConversionErrors(contextMap, true);
-
-	                    setParameters(requestParameters.getRequestAction(), responseAction,requestParameters.getRequestParameters());
-	                } finally {
-	                    ReflectionContextState.setCreatingNullObjects(contextMap, false);
-	                    ReflectionContextState.setDenyMethodExecution(contextMap, false);
-	                    ReflectionContextState.setReportingConversionErrors(contextMap, false);
-	                }
-	            }
-	        }
-	        return responseAction;
-	    }
-	    private String getParameterLogMap(Map<String, Object> parameters) {
-	        if (parameters == null) {
-	            return "NONE";
-	        }
-
-	        StringBuilder logEntry = new StringBuilder();
-	        for (Map.Entry entry : parameters.entrySet()) {
-	            logEntry.append(String.valueOf(entry.getKey()));
-	            logEntry.append(" => ");
-	            if (entry.getValue() instanceof Object[]) {
-	                Object[] valueArray = (Object[]) entry.getValue();
-	                logEntry.append("[ ");
-			if (valueArray.length > 0 ) {
-	                    for (int indexA = 0; indexA < (valueArray.length - 1); indexA++) {
-	                        Object valueAtIndex = valueArray[indexA];
-	                        logEntry.append(String.valueOf(valueAtIndex));
-	                        logEntry.append(", ");
-	                    }
-	                    logEntry.append(String.valueOf(valueArray[valueArray.length - 1]));
-	                }
-	                logEntry.append(" ] ");
-	            } else {
-	                logEntry.append(String.valueOf(entry.getValue()));
-	            }
-	        }
-
-	        return logEntry.toString();
-	    }
-	    protected boolean acceptableName(String name) {
-	        if (isAccepted(name) && !isExcluded(name)) {
-	            return true;
-	        }
-	        return false;
-	    }    
 
 	    protected boolean isAccepted(String paramName) {
 	        if (!this.acceptParams.isEmpty()) {
@@ -233,7 +180,7 @@ public class RequestParameterCopyToActionDeliver  implements RequestParametersDe
 	    }
 	    
 
-	    protected void setParameters(Object requestAction, Object responseAction, final Map<String, Object> parameters) {
+	    protected void setParameters(Object requestAction, Object responseAction, final Map<String, Object> parameters) throws FailureDeliveryRequestParametersException {
 	        ParameterNameAware parameterNameAware = (requestAction instanceof ParameterNameAware)
 	                ? (ParameterNameAware) requestAction : null;
 
@@ -244,8 +191,8 @@ public class RequestParameterCopyToActionDeliver  implements RequestParametersDe
 	            acceptableParameters = new TreeMap<String, Object>(getOrderedComparator());
 	            params.putAll(parameters);
 	        } else {
-	            params = new TreeMap<String, Object>(parameters);
-	            acceptableParameters = new TreeMap<String, Object>();
+	            params = parameters;
+	            acceptableParameters = new LinkedHashMap<String, Object>();
 	        }
 
 	        for (Map.Entry<String, Object> entry : params.entrySet()) {
@@ -265,65 +212,34 @@ public class RequestParameterCopyToActionDeliver  implements RequestParametersDe
 				try {
 					value = PropertyUtils.getProperty(requestAction, name);
 				} catch (IllegalAccessException e1) {
-					if (devMode) {
-	                    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, "devmode.notification", ActionContext.getContext().getLocale(), "Developer Notification:\n{0}", new Object[]{
-	                             "Unexpected Exception caught getting '" + name + "' on '" + requestAction.getClass() + ": " + e1.getMessage()
-	                    });
-	                    LOG.error(developerNotification);
-	                    
-	                }
+					handleException(requestAction, name, e1);
 				} catch (InvocationTargetException e1) {
-					if (devMode) {
-	                    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, "devmode.notification", ActionContext.getContext().getLocale(), "Developer Notification:\n{0}", new Object[]{
-	                             "Unexpected Exception caught getting '" + name + "' on '" + requestAction.getClass() + ": " + e1.getMessage()
-	                    });
-	                    LOG.error(developerNotification);
-	                    
-	                }
+					handleException(requestAction, name, e1);
 				} catch (NoSuchMethodException e1) {
-					if (devMode) {
-	                    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, "devmode.notification", ActionContext.getContext().getLocale(), "Developer Notification:\n{0}", new Object[]{
-	                             "Unexpected Exception caught getting '" + name + "' on '" + requestAction.getClass() + ": " + e1.getMessage()
-	                    });
-	                    LOG.error(developerNotification);
-	                    
-	                }
+					handleException(requestAction, name, e1);
 				}
 	            try {
 	                org.apache.commons.beanutils.BeanUtils.setProperty(responseAction, name, value);
-	            } catch (RuntimeException e) {
-	                if (devMode) {
-	                    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, "devmode.notification", ActionContext.getContext().getLocale(), "Developer Notification:\n{0}", new Object[]{
-	                             "Unexpected Exception caught setting '" + name + "' on '" + responseAction.getClass() + ": " + e.getMessage()
-	                    });
-	                    LOG.error(developerNotification);
-	                    
-	                }
 	            } catch (IllegalAccessException e) {
-	                if (devMode) {
-	                    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, "devmode.notification", ActionContext.getContext().getLocale(), "Developer Notification:\n{0}", new Object[]{
-	                             "Unexpected Exception caught setting '" + name + "' on '" + responseAction.getClass() + ": " + e.getMessage()
-	                    });
-	                    LOG.error(developerNotification);
-	                    
-	                }
+	            	handleException(requestAction, name, e);
 				} catch (InvocationTargetException e) {
-	                if (devMode) {
-	                    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, "devmode.notification", ActionContext.getContext().getLocale(), "Developer Notification:\n{0}", new Object[]{
-	                             "Unexpected Exception caught setting '" + name + "' on '" + responseAction.getClass() + ": " + e.getMessage()
-	                    });
-	                    LOG.error(developerNotification);
-	                    
-	                }
+					handleException(requestAction, name, e);
 				}
 	        }
 	    }
+		private void handleException(Object requestAction, String name,
+				Exception e1) throws FailureDeliveryRequestParametersException {
+			if (devMode) {
+			    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, "devmode.notification", ActionContext.getContext().getLocale(), "Developer Notification:\n{0}", new Object[]{
+			             "Unexpected Exception caught getting '" + name + "' on '" + requestAction.getClass() + ": " + e1.getMessage()
+			    });
+			    LOG.error(developerNotification);
+			    
+			}
+			throw new FailureDeliveryRequestParametersException(e1);
+		}
 
 
-	public Object delivery(FlushScopedRequest requestParameters, ActionInvocation actionInvocation, Object responseAction)
-			throws Exception {
-		return doIntercept(requestParameters, actionInvocation, responseAction);
-	}
 
 
 }

@@ -72,7 +72,7 @@ public class FlushInterceptor extends AbstractInterceptor {
 	private void deliveryRequestParametersToResponseAction(Object responseAction, ActionInvocation actionInvocation,
 			FlushScopedRequest storedRequestParametersFromSession) throws FailureDeliveryRequestParametersException{
 		try {
-			this.requestParametersDeliver.delivery(storedRequestParametersFromSession, actionInvocation, responseAction);
+			this.requestParametersDeliver.delivery(storedRequestParametersFromSession,responseAction);
 		} catch(Exception e) {
 			this.exceptionHandler.handle(e);
 		}
