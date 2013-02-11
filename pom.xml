@@ -97,4 +97,17 @@
       </plugin>
     </plugins>
   </reporting>
+  <url>http://www.yasudanetwork.com/struts2-flush</url>
+  <organization>
+  	<url>http://www.yasudanetwork.com</url>
+  	<name>YASUDA Network.</name>
+  </organization>
+  <scm>
+  	<url>git://192.168.100.30:/struts2/flush.git</url>
+  </scm>
+  <description>The Flush Scope Plugin provides a &quot;flush scope&quot; into your struts2 web applications.
+use &quot;
+
+Use the &quot;flush&quot; result type, you will run the Action parameter to redirect to take over.
+</description>
 </project>

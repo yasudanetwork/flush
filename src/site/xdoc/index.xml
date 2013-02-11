@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>Page Title</title>
+    <author email="user@company.com">John Doe</author>
+  </properties>
+
+  <body>
+
+    <section name="What's Struts2 Flush Scope Plugin">
+The Flush Scope Plugin provides a "flush scope" into your struts2 web applications.
+use "
+
+Use the "flush" result type, you will run the Action parameter to redirect to take over.
+    </section>
+
+    <section name="How To Use">
+if your project contains convention plugin, add Result Annotation to your Action.
+      <source>
+@Result(name="success", type="flush", location="confirm.action")
+public class SubmitAction() {
+	public String execute() throws Exception {
+		//do somethings.
+		return "success";
+	}
+}
+
+@Result(name="success", location="confirm.jsp")
+public class ConfirmAction() {
+	public String execute() throws Exception {
+		return "success";
+	}
+}
+      </source>
+
+    </section>
+
+  </body>
+</document>

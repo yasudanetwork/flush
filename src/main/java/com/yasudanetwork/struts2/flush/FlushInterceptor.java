@@ -4,28 +4,19 @@ import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
-import org.apache.struts2.dispatcher.mapper.ActionMapping;
-
-
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.DefaultActionInvocation;
-import com.opensymphony.xwork2.DefaultActionProxy;
 import com.opensymphony.xwork2.Result;
-import com.opensymphony.xwork2.config.entities.ActionConfig;
-import com.opensymphony.xwork2.config.entities.ResultConfig;
-import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
-import com.opensymphony.xwork2.interceptor.PreResultListener;
-import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
 import com.yasudanetwork.struts2.flush.exceptionhandler.ThrowExceptionHandler;
 import com.yasudanetwork.struts2.flush.request.NullFlushScopedRequest;
 import com.yasudanetwork.struts2.flush.requestdeliver.RequestParameterCopyToActionDeliver;
 
 public class FlushInterceptor extends AbstractInterceptor {
 
-	RequestParametersDeliver requestParametersDeliver = new RequestParameterCopyToActionDeliver();
-	ExceptionHandler exceptionHandler = new ThrowExceptionHandler();
+	private transient RequestParametersDeliver requestParametersDeliver = new RequestParameterCopyToActionDeliver();
+	private transient ExceptionHandler exceptionHandler = new ThrowExceptionHandler();
 	/**
 	 * serial UID.
 	 */
@@ -33,20 +24,7 @@ public class FlushInterceptor extends AbstractInterceptor {
     
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
-		/**
-		invocation.addPreResultListener(new PreResultListener() {
-            public void beforeResult(ActionInvocation invocation, String resultCode) {
-        		try {
-					if(isFlushScopeStart(invocation)) {
-						storeRequestParametersToSession(createFlushScopedRequestParameters(invocation));
-					}
-				} catch (AlreadyExecutedResultException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
-        });
-        */
+
 		if(this.isFlushScopeEnd(invocation)) {
 			deliveryRequestParametersToResponseAction(invocation.getAction(), invocation,this.getStoredRequestParametersFromSession());
 		}
@@ -107,30 +85,6 @@ public class FlushInterceptor extends AbstractInterceptor {
 		}
 		return false;
 	}
-	private ResultConfig _retrieveResult(ActionInvocation actionInvocation,String resultCode) {
-		ActionContext invocationContext = actionInvocation.getInvocationContext();
-		
-        ActionConfig config = actionInvocation.getProxy().getConfig();
-        Map<String, ResultConfig> results = config.getResults();
-        ResultConfig resultConfig = null;
-
-        try {
-            resultConfig = results.get(resultCode);
-        } catch (NullPointerException e) {
-            // swallow
-        }
-        
-        if (resultConfig == null) {
-            // If no result is found for the given resultCode, try to get a wildcard '*' match.
-            resultConfig = results.get("*");
-        }
-		//find result settings of ActionContext.
-		ActionMapping mapping = (ActionMapping) invocationContext.get(ServletActionContext.ACTION_MAPPING);
-		//com.opensymphony.xwork2.dispatcher.PageContext pageContext = (PageContext) invocationContext.get(ServletActionContext.PAGE_CONTEXT);
-		
-
-		return resultConfig;
-	}
 	private Result retrieveResult(ActionInvocation actionInvocation) throws AlreadyExecutedResultException {
         if(actionInvocation instanceof DefaultActionInvocation) {
         	try {
@@ -152,7 +106,7 @@ public class FlushInterceptor extends AbstractInterceptor {
         return session.containsKey("tokenkey");
 	}
 	private boolean isAjaxRequest(ActionInvocation invocation) {
-		Map<String, Object> requestParameters = invocation.getInvocationContext().getParameters();
+		//FIXME
 		return false;
 	}
 	private void storeRequestParametersToSession(FlushScopedRequest flushScopedRequest) {
