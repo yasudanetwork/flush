@@ -5,7 +5,7 @@
  <distributionManagement>
     <site>
       <id>www.yasudanetwork.com</id>
-      <url>scp://192.168.1.200/home/public/html/struts2-flush/</url>
+      <url>scp://www.yasudanetwork.com/home/public/html/struts2-flush/</url>
     </site>
   </distributionManagement>
    <groupId>com.yasudanetwork.struts2</groupId>
