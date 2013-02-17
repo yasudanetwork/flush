@@ -25,12 +25,12 @@ import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.yasudanetwork.struts2.flush.FailureDeliveryRequestParametersException;
 import com.yasudanetwork.struts2.flush.FlushScopedRequest;
-import com.yasudanetwork.struts2.flush.RequestParametersDeliver;
+import com.yasudanetwork.struts2.flush.RequestDeliver;
 /**
  * this work like parameter interceptor.
  *
  */
-public class RequestParameterCopyToActionDeliver  implements RequestParametersDeliver{
+public class RequestParameterCopyToActionDeliver  implements RequestDeliver{
 	 private static final Logger LOG = LoggerFactory.getLogger(RequestParameterCopyToActionDeliver.class);
 	   boolean ordered = false;
 	    Set<Pattern> excludeParams = Collections.emptySet();

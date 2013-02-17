@@ -7,7 +7,9 @@
 <struts>
     <constant name="struts.flush.tokenprefix" value="dsafdsfsdfas74562-148231712438312734" />
     <constant name="struts.flush.exceptionhandler" value="com.yasudanetwork.struts2.flush.exceptionhandler.SilentExceptionHandler" />
-    <constant name="struts.flush.requestdeliver" value="com.yasudanetwork.struts2.flush.requestdeliver.SilentExceptionHandler" />
+    <bean type="com.yasudanetwork.struts2.flush.ExceptionHandler" class="com.yasudanetwork.struts2.flush.exceptionhandler.SilentExceptionHandler"/>
+    <bean type="com.yasudanetwork.struts2.flush.RequestDeliver" class="com.yasudanetwork.struts2.flush.requestdeliver.RequestActionCopyToResponseActionDeliver"/>
+    <bean class="com.yasudanetwork.struts2.flush.actionconfig.ActionConfigHelper"/>
     <package name="flush-default" extends="struts-default">
         <result-types>
             <result-type name="flush" class="com.yasudanetwork.struts2.flush.FlushResult"/>

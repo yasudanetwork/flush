@@ -8,20 +8,36 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.DefaultActionInvocation;
 import com.opensymphony.xwork2.Result;
+import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import com.yasudanetwork.struts2.flush.actionconfig.ActionConfigHelper;
 import com.yasudanetwork.struts2.flush.exceptionhandler.ThrowExceptionHandler;
 import com.yasudanetwork.struts2.flush.request.NullFlushScopedRequest;
 import com.yasudanetwork.struts2.flush.requestdeliver.RequestParameterCopyToActionDeliver;
 
 public class FlushInterceptor extends AbstractInterceptor {
-
-	private transient RequestParametersDeliver requestParametersDeliver = new RequestParameterCopyToActionDeliver();
+	private transient ActionConfigHelper configHelper = new ActionConfigHelper();
+	private transient RequestDeliver requestParametersDeliver = new RequestParameterCopyToActionDeliver();
 	private transient ExceptionHandler exceptionHandler = new ThrowExceptionHandler();
+
+    @Inject
+    public void setActionConfigHelper(ActionConfigHelper actionConfigHelper) {
+        this.configHelper = actionConfigHelper;
+    }
+    @Inject
+    public void setRequestParametersDeliver(RequestDeliver requestParametersDeliver) {
+    	this.requestParametersDeliver = requestParametersDeliver;
+    }
+    @Inject
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+    	this.exceptionHandler = exceptionHandler;
+    }
 	/**
 	 * serial UID.
 	 */
 	private static final long serialVersionUID = 1L;
     
+	
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 

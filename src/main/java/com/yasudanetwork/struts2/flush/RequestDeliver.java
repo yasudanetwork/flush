@@ -1,6 +1,6 @@
 package com.yasudanetwork.struts2.flush;
 
-public interface RequestParametersDeliver {
+public interface RequestDeliver {
 	/**
 	 * implement your delivery logic.
 	 * <pre>

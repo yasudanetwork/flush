@@ -11,15 +11,15 @@ import com.opensymphony.xwork2.util.logging.Logger;
 import com.opensymphony.xwork2.util.logging.LoggerFactory;
 import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
 import com.yasudanetwork.struts2.flush.FlushScopedRequest;
-import com.yasudanetwork.struts2.flush.RequestParametersDeliver;
+import com.yasudanetwork.struts2.flush.RequestDeliver;
 
 /**
  * this work like chain mixed redirect.
 
  *
  */
-public class RequestParameterCopyToActionContextDeliver implements RequestParametersDeliver {
-	 private static final Logger LOG = LoggerFactory.getLogger(RequestParameterCopyToActionContextDeliver.class);	   
+public class RequestActionCopyToResponseActionDeliver implements RequestDeliver {
+	 private static final Logger LOG = LoggerFactory.getLogger(RequestActionCopyToResponseActionDeliver.class);	   
 	 protected Collection<String> excludes;
 	    protected Collection<String> includes;
 	    
