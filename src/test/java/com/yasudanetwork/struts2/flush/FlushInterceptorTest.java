@@ -10,10 +10,8 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.DefaultActionInvocation;
 import com.opensymphony.xwork2.Result;
-import com.opensymphony.xwork2.mock.MockActionInvocation;
 
 public class FlushInterceptorTest {
 
