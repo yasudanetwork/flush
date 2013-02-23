@@ -14,8 +14,6 @@
     <!-- side bar - Overview -->
     <menu name="Overview">
       <item name="Introduction" href="index.html"/>
-      <item name="Usage" href="usage.html"/>
-      <item name="FAQ" href="faq.html" />
     </menu>
     <!-- side bar - Project Documentation -->
     <menu ref="reports" />
