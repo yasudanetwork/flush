@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
-  </parent>
-	<version>0.1</version>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	<version>0.1-SNAPSHOT</version>
 	<groupId>com.yasudanetwork.struts2</groupId>
 	<artifactId>flush-scope-plugin</artifactId>
 	<name>Struts 2 Flush Scope Plugin</name>
@@ -17,10 +17,12 @@
 	</organization>
 	<scm>
 		<url>git://scm.yasudanetwork.com:/struts2/flush.git</url>
-    <developerConnection>scm:git:ssh://192.168.100.30:8022/home/scm/struts2/flush.git</developerConnection>
+		<!--
+		<developerConnection>scm:git:ssh://192.168.100.30:8022/home/scm/struts2/flush.git</developerConnection>
+		-->
 	</scm>
 	<description>The Flush Scope Plugin provides a "flush scope" into your struts2 web applications.</description>
-	
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -40,45 +42,73 @@
 		<struts2.version>2.1.8.1</struts2.version>
 	</properties>
 	<distributionManagement>
-	    <site>
-      <id>www.yasudanetwork.com</id>
-      <url>scp://www.yasudanetwork.com/home/public/html/struts2-flush/</url>
-    </site>
+		<site>
+			<id>www.yasudanetwork.com</id>
+			<url>scp://www.yasudanetwork.com/home/public/html/struts2-flush/</url>
+		</site>
 		<repository>
 			<id>sonatype-nexus-staging</id>
-			<name>Maven Central Repository</name>
+			<name>Maven Release Repository</name>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Maven Snapshots Repository</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 	</distributionManagement>
-	    <profiles>
-        <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.0-alpha-4</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+	<profiles>
+		<profile>
+			<id>sonatype-snapshots</id>
+			<repositories>
+				<repository>
+					<id>sonatype-nexus-snapshots</id>
+					<name>Sonatype Nexus Snapshots</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>sonatype-nexus-snapshots</id>
+					<name>Sonatype Nexus Snapshots</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.0-alpha-4</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<!-- 依存関係 -->
 	<dependencies>
 		<dependency>
@@ -113,7 +143,7 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-			<!-- scmへsshで接続するために wagon-sshの定義をする -->
+				<!-- scmへsshで接続するために wagon-sshの定義をする -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
@@ -191,12 +221,12 @@
 				<version>2.2.1</version>
 				<executions>
 					<execution>
-            <id>attach-sources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
+						<id>attach-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
