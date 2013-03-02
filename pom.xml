@@ -6,7 +6,7 @@
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-	<version>0.1</version>
+	<version>0.1-SNAPSHOT</version>
 	<groupId>com.yasudanetwork.struts2</groupId>
 	<artifactId>flush-scope-plugin</artifactId>
 	<name>Struts 2 Flush Scope Plugin</name>
