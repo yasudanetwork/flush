@@ -6,7 +6,7 @@
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<groupId>com.yasudanetwork.struts2</groupId>
 	<artifactId>flush-scope-plugin</artifactId>
 	<name>Struts 2 Flush Scope Plugin</name>
@@ -16,7 +16,9 @@
 		<name>YASUDA Network</name>
 	</organization>
 	<scm>
-		<url>git@github.com:yasudanetwork/flush.git</url>
+		<!-- アクセスするのにパスフレーズの入力や秘密鍵の必要のないPublicなURL -->
+		<url>git://github.com/yasudanetwork/flush.git</url>
+		<!-- アクセスするのにパスフレーズの入力や秘密鍵の必要な開発用URL -->
 		<developerConnection>scm:git:git@github.com:yasudanetwork/flush.git</developerConnection>
 	  <tag>HEAD</tag>
   </scm>
@@ -43,7 +45,7 @@
 	<distributionManagement>
 		<site>
 			<id>www.yasudanetwork.com</id>
-			<url>scp://www.yasudanetwork.com/home/public/html/struts2-flush/</url>
+			<url>scm:git:git@github.com:yasudanetwork/flush.git</url>
 		</site>
 		<repository>
 			<id>sonatype-nexus-staging</id>
