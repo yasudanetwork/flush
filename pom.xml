@@ -17,7 +17,7 @@
 	</organization>
 	<scm>
 		<!-- アクセスするのにパスフレーズの入力や秘密鍵の必要のないPublicなURL -->
-		<url>git://github.com/yasudanetwork/flush.git</url>
+		<url>scm:git:git://github.com/yasudanetwork/flush.git</url>
 		<!-- アクセスするのにパスフレーズの入力や秘密鍵の必要な開発用URL -->
 		<developerConnection>scm:git:git@github.com:yasudanetwork/flush.git</developerConnection>
    <tag>HEAD</tag>
@@ -168,7 +168,7 @@
   				<configuration>
     				<!-- リモートにプッシュしないように -->
     				<pushChanges>false</pushChanges>
-    				<localCheckout>false</localCheckout>
+    				<localCheckout>true</localCheckout>
   				</configuration>
 			</plugin>
 			<plugin>
