@@ -16,8 +16,8 @@
 		<name>YASUDA Network</name>
 	</organization>
 	<scm>
-		<url>git://scm.yasudanetwork.com:/struts2/flush.git</url>
-		<developerConnection>scm:git:ssh://yasu@192.168.100.30/home/scm/struts2/flush.git</developerConnection>
+		<url>git@github.com:yasudanetwork/flush.git</url>
+		<developerConnection>scm:git:git@github.com:yasudanetwork/flush.git</developerConnection>
 	</scm>
 	<description>The Flush Scope Plugin provides a "flush scope" into your struts2 web applications.</description>
 
