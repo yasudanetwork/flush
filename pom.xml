@@ -44,10 +44,11 @@
 		<struts2.version>2.1.8.1</struts2.version>
 	</properties>
 	<distributionManagement>
-		<site>
+		<!--<site>
 			<id>www.yasudanetwork.com</id>
 			<url>scm:git:git@github.com:yasudanetwork/flush.git</url>
 		</site>
+		-->
 		<repository>
 			<id>sonatype-nexus-staging</id>
 			<name>Maven Release Repository</name>
@@ -127,7 +128,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
+			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -143,23 +144,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<pluginManagement>
-			<plugins>
-				<!-- scmへsshで接続するために wagon-sshの定義をする -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.2</version>
-					<dependencies>
-						<dependency><!-- add support for ssh/scp -->
-							<groupId>org.apache.maven.wagon</groupId>
-							<artifactId>wagon-ssh</artifactId>
-							<version>1.0</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<!-- release -->
 			<plugin>
@@ -184,33 +168,12 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
+				<version>3.2</version>
 				<configuration>
 					<locales>en,ja</locales>
 				</configuration>
 			</plugin>
-			<!-- カバレッジ -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<configuration>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-					<instrumentation>
-						<excludes>
-							<exclude>**/*Test.class</exclude>
-						</excludes>
-					</instrumentation>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+	
 			<!-- jarを作るときにjavadocのjarも作る -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
