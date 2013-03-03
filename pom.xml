@@ -17,7 +17,8 @@
 	</organization>
 	<scm>
 		<!-- アクセスするのにパスフレーズの入力や秘密鍵の必要のないPublicなURL -->
-		<url>scm:git:git://github.com/yasudanetwork/flush.git</url>
+		<url>https://github.com/yasudanetwork/flush.git</url>
+		<connection>scm:git:https://github.com/yasudanetwork/flush.git</connection>
 		<!-- アクセスするのにパスフレーズの入力や秘密鍵の必要な開発用URL -->
 		<developerConnection>scm:git:git@github.com:yasudanetwork/flush.git</developerConnection>
    <tag>HEAD</tag>
