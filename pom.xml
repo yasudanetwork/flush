@@ -6,7 +6,7 @@
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-	<version>0.1</version>
+	<version>0.1-SNAPSHOT</version>
 	<groupId>com.yasudanetwork.struts2</groupId>
 	<artifactId>flush-scope-plugin</artifactId>
 	<name>Struts 2 Flush Scope Plugin</name>
@@ -157,6 +157,17 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<!-- release -->
+			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-release-plugin</artifactId>
+  				<version>2.4</version>
+  				<configuration>
+    				<!-- リモートにプッシュしないように -->
+    				<pushChanges>false</pushChanges>
+    				<localCheckout>false</localCheckout>
+  				</configuration>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
